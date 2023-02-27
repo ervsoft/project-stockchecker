@@ -9,16 +9,9 @@ const runner = require('./test-runner');
 const helmet = require('helmet');
 
 const app = express();
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-    connectSrc: validConnectSrc,
-    styleSrc: ["'self'", "'unsafe-inline'"],
-    imgSrc: ["'self'"],
-  },
-}));
 
+
+app.use(helmet.contentSecurityPolicy({ directives: { defaultSrc: ["'self'"], scriptSrc: ["'self'", "trusted-cdn.com"] } }))
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(bodyParser.json());
