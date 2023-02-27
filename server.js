@@ -9,15 +9,15 @@ const runner = require('./test-runner');
 const helmet = require('helmet');
 
 const app = express();
-app.use(helmet());
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", 'https://project-stockchecker.agokmen.repl.co'],
-    styleSrc: ["'self'", 'https://project-stockchecker.agokmen.repl.co']
-  }
+    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+    connectSrc: validConnectSrc,
+    styleSrc: ["'self'", "'unsafe-inline'"],
+    imgSrc: ["'self'"],
+  },
 }));
-
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
