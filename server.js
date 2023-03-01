@@ -3,15 +3,23 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const helmet = require('helmet');
+require('dotenv').config();
+const URI = process.env.MONGO_URI;
+const mongoose = require('mongoose');
 const apiRoutes = require('./routes/api.js');
 const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner');
-const helmet = require('helmet');
-
+const databaseName = 'stockPriceChecker';
 const app = express();
+app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"], scriptSrc: ["'self'"],
+    styleSrc: ["'self'"]
+  }
+}))
 
-
-app.use(helmet.contentSecurityPolicy({ directives: { defaultSrc: ["'self'"], scriptSrc: ["'self'"] } }))
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(bodyParser.json());
