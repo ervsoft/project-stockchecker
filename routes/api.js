@@ -17,12 +17,15 @@ module.exports = function (app) {
         .then(results => {
           const stockData = results.map(result => {
             const price = result.data.latestPrice;
-            const stock = result.data.symbol;
-            const likes = like ? 1 : 0;
-            return { stock: stock, price: price, likes: likes };
+            const likes = result.data.likes || 0;
+
+            return { stock: result.data.symbol, price: price, likes: likes };
           });
-          //res.json({ stockData });
-          console.log(stockData);
+          if (stockData.length === 2) {
+            stockData[0].rel_likes = stockData[0].likes - stockData[1].likes;
+            stockData[1].rel_likes = stockData[1].likes - stockData[0].likes;
+          }
+          res.json({ stockData });
         })
         .catch(error => {
           console.log(error);
