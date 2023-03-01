@@ -15,9 +15,9 @@ module.exports = function (app) {
       Promise.all(requests)
         .then(results => {
           const stockData = results.map(result => {
-            const stockSymbol = String(result.data.symbol);
+            const stockSymbol = result.data.symbol;
             const price = Number(result.data.latestPrice);
-            const likes = Number(result.data.volume);
+            const likes = result.data.like ? 1 : 0;
             const likeCond = Array.isArray(stocks) ? "rel_likes" : "likes";
             return { stock: stockSymbol, price: price, [likeCond]: likes };
           });
