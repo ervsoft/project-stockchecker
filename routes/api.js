@@ -16,10 +16,11 @@ module.exports = function (app) {
       Promise.all(requests)
         .then(results => {
           const stockData = results.map(result => {
-            const price = result.data.latestPrice;
-            const likes = result.data.volume;
+            const stockSymbol = String(result.data.symbol);
+            const price = Number(result.data.latestPrice);
+            const likes = Number(result.data.volume);
 
-            return { stock: result.data.symbol, price: price, likes: likes };
+            return { stock: stockSymbol, price: price, likes: likes };
           });
           // if (stockData.length === 2) {
           //   stockData[0].rel_likes = stockData[0].likes - stockData[1].likes;
