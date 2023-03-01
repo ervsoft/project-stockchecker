@@ -16,20 +16,23 @@ module.exports = function (app) {
       Promise.all(requests)
         .then(results => {
           const stockData = results.map(result => {
-            const price = int(result.data.latestPrice);
+            const price = parseInt(result.data.latestPrice);
             const likes = like ? 1 : 0;
             return { stock: result.data.symbol, price: price, likes: likes };
           });
+          // If there are two stocks, calculate the rel_likes property for each stock
+          if (stockData.length === 2) {
+            stockData[0].rel_likes = stockData[0].likes - stockData[1].likes;
+            stockData[1].rel_likes = stockData[1].likes - stockData[0].likes;
+            delete stockData[0].likes;
+            delete stockData[1].likes;
+          }
           res.json({ stockData });
         })
         .catch(error => {
           console.log(error);
           res.status(500).send('Error retrieving stock prices');
         });
-
-
-
-
     });
 
 };
