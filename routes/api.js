@@ -27,6 +27,7 @@ module.exports = function (app) {
             delete stockData[1].likes;
           }
 
+
           res.json({ stockData: stockData });
         })
         .catch(error => {
