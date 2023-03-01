@@ -16,7 +16,7 @@ module.exports = function (app) {
       Promise.all(requests)
         .then(results => {
           const stockData = results.map(result => {
-            const price = result.data.latestPrice;
+            const price = int(result.data.latestPrice);
             const likes = like ? 1 : 0;
             return { stock: String(result.data.symbol), price, likes };
           });
