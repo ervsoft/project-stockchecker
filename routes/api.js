@@ -17,7 +17,7 @@ module.exports = function (app) {
           const stockData = results.map(result => {
             const stockSymbol = result.data.symbol;
             const price = Number(result.data.latestPrice);
-            const likes = result.data.like ? 1 : 0;
+            const likes = result.data.iexVolume ? 1 : 0;
             const likeCond = Array.isArray(stocks) ? "rel_likes" : "likes";
             return { stock: stockSymbol, price: price, [likeCond]: likes };
           });
