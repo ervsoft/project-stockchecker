@@ -18,8 +18,8 @@ module.exports = function (app) {
             const stockSymbol = String(result.data.symbol);
             const price = Number(result.data.latestPrice);
             const likes = Number(result.data.volume);
-
-            return { stock: stockSymbol, price: price, likes: likes };
+            const likeCond = isArray(stocks) ? "rel_likes" : "likes";
+            return { stock: stockSymbol, price: price, [likeCond]: likes };
           });
           // if (stockData.length === 2) {
           //   stockData[0].rel_likes = stockData[0].likes - stockData[1].likes;
