@@ -18,7 +18,7 @@ module.exports = function (app) {
           const stockData = results.map(result => {
             const price = int(result.data.latestPrice);
             const likes = like ? 1 : 0;
-            return { stock: String(result.data.symbol), price, likes };
+            return { stock: result.data.symbol, price: price, likes: likes };
           });
           res.json({ stockData });
         })
