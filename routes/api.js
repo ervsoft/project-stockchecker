@@ -21,8 +21,8 @@ module.exports = function (app) {
             return { stock: stockSymbol, price: price, likes };
           });
           if (stockData.length === 2) {
-            stockData[0].rel_likes = stockData[0].likes - stockData[1].likes + 1 || 1;
-            stockData[1].rel_likes = stockData[1].likes - stockData[0].likes - 1 || -1;
+            stockData[0].rel_likes = stockData[0].likes - stockData[1].likes + 1;
+            stockData[1].rel_likes = stockData[1].likes - stockData[0].likes - 1;
             delete stockData[0].likes;
             delete stockData[1].likes;
           }
