@@ -17,14 +17,16 @@ module.exports = function (app) {
           const stockData = results.map(result => {
             const stockSymbol = result.data.symbol;
             const price = Number(result.data.latestPrice);
-            const likes = result.data.iexVolume ? 1 : 0;
-            const likeCond = Array.isArray(stocks) ? "rel_likes" : "likes";
-            return { stock: stockSymbol, price: price, [likeCond]: likes };
+            const likes = result.data.iexVolume || 1;
+            return { stock: stockSymbol, price: price, likes };
           });
           if (stockData.length === 2) {
-            stockData[0].rel_likes = stockData[0].likes - stockData[1].likes;
-            stockData[1].rel_likes = stockData[1].likes - stockData[0].likes;
+            stockData[0].rel_likes = stockData[0].likes - stockData[1].likes + 1;
+            stockData[1].rel_likes = stockData[1].likes - stockData[0].likes - 1;
+            delete stockData[0].likes;
+            delete stockData[1].likes;
           }
+
           res.json({ stockData: stockData });
         })
         .catch(error => {
