@@ -4,9 +4,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
-require('dotenv').config();
-const URI = process.env.MONGO_URI;
-const mongoose = require('mongoose');
 const apiRoutes = require('./routes/api.js');
 const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner');
@@ -19,32 +16,7 @@ app.use(helmet.contentSecurityPolicy({
     styleSrc: ["'self'"]
   }
 }))
-app.set('trust proxy', true);
-mongoose.Promise = global.Promise;
 
-const start = async () => {
-  await mongoose.connect(URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
-  });
-}
-
-start();
-
-const db = mongoose.connection
-db.on('error', err => { console.error(err) })
-db.once('open', () => {
-  console.log('Connected to' + databaseName)
-})
-
-process.on('SIGNIT', () => {
-  db.close(() => {
-    console.log(`Closing connection to ${databaseName}`)
-    process.exit(0)
-  })
-})
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
