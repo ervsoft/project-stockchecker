@@ -11,7 +11,7 @@ const helmet = require('helmet');
 const app = express();
 
 
-app.use(helmet.contentSecurityPolicy({ directives: { defaultSrc: ["'self'"], scriptSrc: ["'self'", "trusted-cdn.com"] } }))
+app.use(helmet.contentSecurityPolicy({ directives: { defaultSrc: ["'self'"], scriptSrc: ["'self'"] } }))
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(bodyParser.json());
