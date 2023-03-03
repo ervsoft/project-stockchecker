@@ -15,7 +15,7 @@ module.exports = function (app) {
       Promise.all(requests)
         .then(results => {
           let stockData = results.map(result => {
-            const stockSymbol = result.data.symbol;
+            const stockSymbol = String(result.data.symbol);
             const price = Number(result.data.latestPrice);
             const likes = Number(result.data.iexVolume || 1);
             return { stock: stockSymbol, price: price, likes };
