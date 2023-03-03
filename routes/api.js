@@ -14,21 +14,33 @@ module.exports = function (app) {
 
       Promise.all(requests)
         .then(results => {
-          const stockData = results.map(result => {
+          let stockData = results.map(result => {
             const stockSymbol = result.data.symbol;
             const price = Number(result.data.latestPrice);
-            const likes = result.data.iexVolume || 1;
-            return { stock: stockSymbol, stocksymbol: stockSymbol, price: price, likes };
+            const likes = Number(result.data.iexVolume || 1);
+            return { stock: stockSymbol, price: price, likes };
           });
+
+          if (like) {
+            const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            const ips = like.split(',');
+            stockData = stockData.map(stock => {
+              if (ips.includes(ip) && stock.likes === 1) {
+                stock.likes++;
+              }
+              return stock;
+            });
+          }
+
           if (stockData.length === 2) {
-            stockData[0].rel_likes = stockData[0].likes - stockData[1].likes + 1;
-            stockData[1].rel_likes = stockData[1].likes - stockData[0].likes - 1;
+            const rel_likes = stockData[0].likes - stockData[1].likes;
+            stockData[0].rel_likes = rel_likes;
+            stockData[1].rel_likes = -rel_likes;
             delete stockData[0].likes;
             delete stockData[1].likes;
           }
 
-
-          res.json({ stockData: stockData });
+          res.json({ stockData: Array.isArray(stocks) ? stockData : stockData[0] });
         })
         .catch(error => {
           console.log(error);
